@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <script language="javascript">
+      const ajax = (url, callback) => {
+        const httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = () => {
+          if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+              callback(JSON.parse(httpRequest.responseText));
+            } else {
+              alert("There was a problem with the request.");
+            }
+          }
+        };
+        httpRequest.open("GET", url);
+        httpRequest.send();
+      };
+
+      const ajax2 = (url) =>
+        new Promise((resolve) => {
+          ajax(url, resolve);
+        });
+
+      const url = "https://jsonplaceholder.typicode.com/users";
+
+      ajax(url, (users) => {
+        const novoUrl = "https://" + users[2].website;
+        ajax(url, (userSite) => {
+          console.log(userSite);
+        });
+        console.log("oi");
+      });
+      console.log("olá");
+
+      (async () => {
+        const users = await ajax2(url);
+        const novoUrl = "https://" + users[2].website;
+        const userSite = await ajax2(url);
+        console.log(userSite);
+        console.log("oi");
+        console.log("olá");
+      })();
+    </script>
+  </head>
+</html>
